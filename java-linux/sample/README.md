@@ -34,5 +34,5 @@ g++ -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libsamp
 
 # Compile the java code
 javac Program.java
-## jar cvfM Program -C classes .
+jar cvfM Program.jar -C classes .
 java -Djava.library.path=. Program
