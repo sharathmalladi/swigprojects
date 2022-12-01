@@ -72,6 +72,8 @@ jar cvf Program.jar *.class
 
 ## Step 8: Run the java program
 ```bash
+# LD_LIBRARY_PATH must contain the folder that has sample.so so it can be found by libsamplewrapper.so.
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
 # java.library.path is current folder since that is where the libsamplewrapper.so file is present.
 java -Djava.library.path=. Program
 ```
