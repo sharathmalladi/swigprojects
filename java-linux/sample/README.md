@@ -1,38 +1,70 @@
-!#/bin/bash
+!#/bin/sh
 
+
+## Step 1: Install packages
+```bash
+sudo apt-get update  
+sudo apt-get install g++  
+sudo apt-get install swig  
+```
+
+## Step 2: Clean up generated and temp files
+```bash
 export ROOTFOLDER=`pwd`
+rm -rf $ROOTFOLDER/swigoutput  
+rm -f $ROOTFOLDER/cpp/*.o  
+rm -f $ROOTFOLDER/cpp/*.so  
+```
 
-# Get packages
-sudo apt-get update
-sudo apt-get install g++
-sudo apt-get install swig
-
-# clean up generated and temp files
-rm -rf $ROOTFOLDER/swigoutput
-rm -f $ROOTFOLDER/cpp/*.o
-rm -f $ROOTFOLDER/cpp/*.so
-
-# compile cpp code, first create the object file, then the shared library (.so) file.
+## Step 3: Compile the sample c++ project
+```bash
 cd $ROOTFOLDER/cpp
+# Compile cpp code
 g++ -c -o sample.o sample.cpp
+# Create the shared object file
 g++ -shared -o sample.so sample.o
+```
 
+## Step 4: Create the java classes from the SWIG interface
+```bash
 cd $ROOTFOLDER
 mkdir -p swigoutput
-# create java interface files: look in cpp folder for source files, place java files in swigoutput folder and c++ wrapper in swigoutfolder
+# create java classes: look in 'cpp' folder for source files, place java files in 'swigoutput' folder and cpp wrapper file in a file named 'swigoutput/sample_wrapper.cpp'.
 swig -java -c++ -Icpp -outdir swigoutput -o swigoutput/sample_wrapper.cpp sample.i 
+```
 
-# Get everything to swigoutput folder before compiling the shared library from the swig generated wrapper c++ file
+## Step 5: Copy files to one common location
+
+```bash
+# Copy everything to swigoutput folder before compiling the shared library from the swig generated wrapper c++ file
 cd $ROOTFOLDER/swigoutput
 cp $ROOTFOLDER/cpp/sample.so .
 cp $ROOTFOLDER/cpp/sample.h .
 cp $ROOTFOLDER/java/Program.java .
+```
 
+## Step 6: Build new shared library that references wrapper code and the c++ library
+
+```bash
 # PIC = position independent code
 # The shared library should be prefixed with "lib" for things to work.
-g++ -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libsamplewrapper.so sample_wrapper.cpp
+# Include the c++ source code binary (sample.so) as well as the swig generated c++ file and create a new shared library.
+## ls $JAVA_HOME/include shows the following files:
+## classfile_constants.h  jawt.h  jdwpTransport.h  jni.h  jvmticmlr.h  jvmti.h  linux  sizecalc.h
+## ls $JAVA_HOME/include/linux
+## jawt_md.h  jni_md.h
+g++ -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libsamplewrapper.so sample_wrapper.cpp sample.so
+```
 
-# Compile the java code
-javac Program.java
-jar cvfM Program.jar -C classes .
+## Step 7: Compile the java code to a jar file
+```bash
+# The java file references the library by calling System.loadLibrary("samplewrapper") since the library is called libsamplewrapper.so in the earlier step (by removing the "lib" prefix).
+javac *.java
+jar cvf Program.jar *.class
+```
+
+## Step 8: Run the java program
+```bash
+# java.library.path is current folder since that is where the libsamplewrapper.so file is present.
 java -Djava.library.path=. Program
+```
