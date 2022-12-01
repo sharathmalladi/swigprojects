@@ -1,5 +1,16 @@
-!#/bin/sh
+# How to use swig to generate an interface with c++ code and call that from a java class.
 
+## Step 0: What environment we are using
+```bash
+## `ls $JAVA_HOME/include` shows the following files:
+## classfile_constants.h  jawt.h  jdwpTransport.h  jni.h  jvmticmlr.h  jvmti.h  linux  sizecalc.h
+## `ls $JAVA_HOME/include/linux` shows the following files:
+## jawt_md.h  jni_md.h
+## `cat /etc/issue` shows the following output:
+## Ubuntu 22.04.1 LTS
+## `java -version` => openjdk version "17.0.5" 2022-10-18
+## `javac -version` => javac 17.0.5
+```
 
 ## Step 1: Install packages
 ```bash
@@ -49,10 +60,6 @@ cp $ROOTFOLDER/java/Program.java .
 # PIC = position independent code
 # The shared library should be prefixed with "lib" for things to work.
 # Include the c++ source code binary (sample.so) as well as the swig generated c++ file and create a new shared library.
-## ls $JAVA_HOME/include shows the following files:
-## classfile_constants.h  jawt.h  jdwpTransport.h  jni.h  jvmticmlr.h  jvmti.h  linux  sizecalc.h
-## ls $JAVA_HOME/include/linux
-## jawt_md.h  jni_md.h
 g++ -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libsamplewrapper.so sample_wrapper.cpp sample.so
 ```
 
