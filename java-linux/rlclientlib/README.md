@@ -59,7 +59,6 @@ swig -java -c++ -I$ROOTFOLDER/reinforcement_learning/include -outdir swigoutput 
 # Copy everything to swigoutput folder before compiling the shared library from the swig generated wrapper c++ file
 cd $ROOTFOLDER/swigoutput
 cp $ROOTFOLDER/librlnetnative.so .
-cp $ROOTFOLDER/reinforcement_learning/include/*.h .
 cp $ROOTFOLDER/java/Program.java .
 ```
 
