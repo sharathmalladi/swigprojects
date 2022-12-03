@@ -44,22 +44,22 @@ curl -o rl.net.nupkg https://globalcdn.nuget.org/packages/rl.net.0.2.0.nupkg
 unzip -j rl.net.nupkg runtimes/linux-x64/native/librlnetnative.so librlnetnative.so
 rm -f rl.net.nupkg
 ```
-
-## Step 4: Create the java classes from the SWIG interface
-```bash
-cd $ROOTFOLDER
-mkdir -p swigoutput
-# create java classes: look in 'cpp' folder for source files, place java files in 'swigoutput' folder and cpp wrapper file in a file named 'swigoutput/sample_wrapper.cpp'.
-swig -java -c++ -I$ROOTFOLDER/reinforcement_learning/include -outdir swigoutput -o swigoutput/rlclient_wrapper.cpp rlclientlib.i
-```
-
-## Step 5: Copy files to one common location
+## Step 4: Copy files to one common location
 
 ```bash
 # Copy everything to swigoutput folder before compiling the shared library from the swig generated wrapper c++ file
+mkdir -p $ROOTFOLDER/swigoutput
 cd $ROOTFOLDER/swigoutput
 cp $ROOTFOLDER/librlnetnative.so .
 cp $ROOTFOLDER/java/Program.java .
+cp $ROOTFOLDER/rlclientlib.i .
+```
+
+## Step 4: Create the java classes from the SWIG interface
+```bash
+cd $ROOTFOLDER/swigoutput
+# create java classes: look in 'cpp' folder for source files, place java files in 'swigoutput' folder and cpp wrapper file in a file named 'swigoutput/sample_wrapper.cpp'.
+swig -java -c++ -I$ROOTFOLDER/reinforcement_learning/include -outdir $ROOTFOLDER/swigoutput -o rlclient_wrapper.cpp rlclientlib.i
 ```
 
 ## Step 6: Build new shared library that references wrapper code and the c++ library
