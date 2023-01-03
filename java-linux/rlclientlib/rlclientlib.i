@@ -22,6 +22,9 @@
 %include "sender.h"
 %include "container_iterator.h"
 %include "live_model.h"
+%include "std_vector.i"
 
 %template(ccirlsrespv) reinforcement_learning::const_container_iterator<reinforcement_learning::slot_response,std::vector<reinforcement_learning::slot_response>>;
 %template(ccirlsrankv) reinforcement_learning::const_container_iterator<reinforcement_learning::slot_ranking,std::vector<reinforcement_learning::slot_ranking>>;
+
+//%clearnodefaultctor reinforcement_learning::const_container_iterator<reinforcement_learning::slot_ranking, std::vector<reinforcement_learning::slot_ranking>>::const_container_iterator;

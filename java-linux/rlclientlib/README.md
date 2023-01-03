@@ -10,6 +10,7 @@
 ## Ubuntu 22.04.1 LTS
 ## `java -version` => openjdk version "17.0.5" 2022-10-18
 ## `javac -version` => javac 17.0.5
+export JAVA_HOME='/usr/lib/jvm/java-11-openjdk-amd64'
 ```
 
 ## Step 1: Install packages
@@ -18,6 +19,8 @@ sudo apt-get update -y
 sudo apt-get install -y g++
 sudo apt-get install -y swig
 sudo apt-get install -y nuget
+sudo apt-get install openjdk-11-jdk
+sudo apt-get install -y unzip
 ```
 
 ## Step 2: Clean up generated and temp files
@@ -34,9 +37,10 @@ cd $ROOTFOLDER
 # Fetch the reinforcement_learning github project.
 git submodule update --init
 # Checkout 0.2.0 tag since the nuget project was built on that tag.
-cd $ROOTFOLDER/rlclientlib/reinforcement_learning
+cd $ROOTFOLDER/reinforcement_learning
 git checkout 0.2.0
 
+cd $ROOTFOLDER
 # nuget command does not work. Needs to be fixed. Using curl instead.
 # nuget install RL.Net -Prerelease -Version 0.2.0
 curl -o rl.net.nupkg https://globalcdn.nuget.org/packages/rl.net.0.2.0.nupkg

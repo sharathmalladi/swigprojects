@@ -10,6 +10,7 @@
 ## Ubuntu 22.04.1 LTS
 ## `java -version` => openjdk version "17.0.5" 2022-10-18
 ## `javac -version` => javac 17.0.5
+export JAVA_HOME='/usr/lib/jvm/java-11-openjdk-amd64'
 ```
 
 ## Step 1: Install packages
@@ -41,7 +42,7 @@ g++ -shared -o sample.so sample.o
 cd $ROOTFOLDER
 mkdir -p swigoutput
 # create java classes: look in 'cpp' folder for source files, place java files in 'swigoutput' folder and cpp wrapper file in a file named 'swigoutput/sample_wrapper.cpp'.
-swig -java -c++ -Icpp -outdir swigoutput -o swigoutput/sample_wrapper.cpp sample.i 
+swig -java -c++ -Icpp -outdir swigoutput -o swigoutput/sample_wrapper.cpp sample.i
 ```
 
 ## Step 5: Copy files to one common location
