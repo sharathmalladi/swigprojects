@@ -63,7 +63,7 @@ cp $ROOTFOLDER/rlclientlib.i .
 ```bash
 cd $ROOTFOLDER/swigoutput
 # create java classes: look in 'cpp' folder for source files, place java files in 'swigoutput' folder and cpp wrapper file in a file named 'swigoutput/sample_wrapper.cpp'.
-swig -java -c++ -I$ROOTFOLDER/reinforcement_learning/include -outdir $ROOTFOLDER/swigoutput -o rlclient_wrapper.cpp rlclientlib.i
+swig -java -c++ -I$ROOTFOLDER/reinforcement_learning/include -outdir $ROOTFOLDER/swigoutput -o rlclient_wrapper.cpp rlclientlib.i 2>&1 | grep -v Warning 
 ```
 
 ## Step 6: Build new shared library that references wrapper code and the c++ library
